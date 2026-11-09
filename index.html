@@ -20,6 +20,16 @@
                     <span class="logo-text">SMKN 1 <em>Kertosono</em></span> <!-- `<span>` wadah teks sebaris untuk gaya/penanda Atribut: kelas `logo-text` mengatur tampilan nama sekolah. `<em>` teks yang diberi penekanan `</em>` menutup elemen em dan mengakhiri cakupan isinya `</span>` menutup elemen span dan mengakhiri cakupan isinya Teks/konten baris ini: “SMKN 1 Kertosono”. -->
                 </a> <!-- `</a>` menutup elemen a dan mengakhiri cakupan isinya -->
 
+                <button class="search-toggle" type="button" aria-label="Buka pencarian" aria-expanded="false" aria-controls="siteSearch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+                </button>
+                <form class="site-search" id="siteSearch" role="search" hidden>
+                    <label class="sr-only" for="siteSearchInput">Cari informasi sekolah</label>
+                    <input id="siteSearchInput" type="search" placeholder="Cari informasi sekolah">
+                    <button type="submit">Cari</button>
+                    <p class="search-status" role="status" aria-live="polite"></p>
+                </form>
+
                 <input class="nav-check" type="checkbox" id="navToggle" aria-label="Buka menu navigasi"> <!-- `<input>` kontrol input checkbox navigasi Atribut: kelas `nav-check` checkbox tersembunyi yang mengendalikan buka-tutup menu seluler, `type="checkbox"` jenis kontrol input, `id="navToggle"` identitas unik untuk target tautan atau pemilih CSS, `aria-label="Buka menu navigasi"` nama aksesibel bagi pembaca layar. -->
                 <label class="nav-toggle" for="navToggle" aria-hidden="true"> <!-- `<label>` label yang mengaktifkan checkbox navigasi Atribut: kelas `nav-toggle` tombol visual untuk membuka atau menutup menu seluler, `for="navToggle"` menghubungkan label dengan id input, `aria-hidden="true"` menyembunyikan elemen dekoratif dari teknologi bantu. -->
                     <span></span><span></span> <!-- `<span>` wadah teks sebaris untuk gaya/penanda `</span>` menutup elemen span dan mengakhiri cakupan isinya `<span>` wadah teks sebaris untuk gaya/penanda `</span>` menutup elemen span dan mengakhiri cakupan isinya -->
@@ -45,6 +55,14 @@
             <div class="hero-media"> <!-- `<div>` wadah umum untuk mengelompokkan elemen Atribut: kelas `hero-media` wadah gambar latar hero. -->
                 <img src="bgutama.jpeg" alt="Gedung SMKN 1 Kertosono"> <!-- `<img>` gambar; atribut alt memberi teks pengganti aksesibel Atribut: `src="bgutama.jpeg"` alamat file gambar/resource, `alt="Gedung SMKN 1 Kertosono"` deskripsi alternatif gambar untuk aksesibilitas. -->
                 <div class="hero-scrim"></div> <!-- `<div>` wadah umum untuk mengelompokkan elemen Atribut: kelas `hero-scrim` lapisan gelap agar teks di atas gambar mudah dibaca. `</div>` menutup elemen div dan mengakhiri cakupan isinya -->
+                <figure class="hero-float hero-float-left">
+                    <img src="foto-lab-rpl.jpeg" alt="Suasana Laboratorium Rekayasa Perangkat Lunak">
+                    <figcaption><span>Fasilitas belajar</span><strong>Laboratorium RPL</strong></figcaption>
+                </figure>
+                <figure class="hero-float hero-float-right">
+                    <img src="foto-lab-cnc.jpeg" alt="Mesin praktik di Laboratorium CNC">
+                    <figcaption><span>Praktik kejuruan</span><strong>Laboratorium CNC</strong></figcaption>
+                </figure>
             </div> <!-- `</div>` menutup elemen div dan mengakhiri cakupan isinya -->
 
             <div class="container hero-inner"> <!-- `<div>` wadah umum untuk mengelompokkan elemen Atribut: kelas `container` membatasi lebar isi dan meratakannya di tengah, kelas `hero-inner` wadah isi teks utama hero. -->
@@ -351,5 +369,41 @@
             <p class="copyright">&copy; 2026 SMKN 1 Kertosono. Seluruh hak cipta dilindungi.</p> <!-- `<p>` paragraf penjelasan Atribut: kelas `copyright` teks hak cipta footer. `</p>` menutup elemen p dan mengakhiri cakupan isinya Teks/konten baris ini: “&copy; 2026 SMKN 1 Kertosono. Seluruh hak cipta dilindungi.”. -->
         </div> <!-- `</div>` menutup elemen div dan mengakhiri cakupan isinya -->
     </footer> <!-- `</footer>` menutup elemen footer dan mengakhiri cakupan isinya -->
+    <script>
+        const searchToggle = document.querySelector('.search-toggle');
+        const searchForm = document.querySelector('.site-search');
+        const searchInput = document.querySelector('#siteSearchInput');
+        const searchStatus = document.querySelector('.search-status');
+
+        searchToggle.addEventListener('click', () => {
+            const isOpen = searchToggle.getAttribute('aria-expanded') === 'true';
+            searchToggle.setAttribute('aria-expanded', String(!isOpen));
+            searchForm.hidden = isOpen;
+            searchStatus.textContent = '';
+            if (!isOpen) searchInput.focus();
+        });
+
+        searchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const query = searchInput.value.trim().toLocaleLowerCase('id');
+            if (!query) {
+                searchStatus.textContent = 'Masukkan kata kunci yang ingin dicari.';
+                searchInput.focus();
+                return;
+            }
+
+            const match = [...document.querySelectorAll('main section, main article, footer')]
+                .find((element) => element.textContent.toLocaleLowerCase('id').includes(query));
+
+            if (!match) {
+                searchStatus.textContent = `Informasi "${searchInput.value.trim()}" tidak ditemukan.`;
+                return;
+            }
+
+            searchForm.hidden = true;
+            searchToggle.setAttribute('aria-expanded', 'false');
+            match.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
 </body> <!-- `</body>` menutup elemen body dan mengakhiri cakupan isinya -->
 </html> <!-- `</html>` menutup elemen html dan mengakhiri cakupan isinya -->
